@@ -490,6 +490,10 @@
 
             data.forEach(voyage => {
                 const row = tbody.insertRow();
+                const sourceDomain = voyage.source ? new URL(voyage.source).hostname.replace('www.', '') : 'Historical';
+                const sourceLink = voyage.source ?
+                    `<a href="${voyage.source}" target="_blank" class="source-link" title="View source">${sourceDomain}</a>` :
+                    '<span class="source-badge">Historical</span>';
                 row.innerHTML = `
                     <td>${voyage.year}</td>
                     <td><strong>${voyage.vessel}</strong></td>
@@ -501,7 +505,7 @@
                     <td>${voyage.tonnage.toLocaleString()}</td>
                     <td>${voyage.distance} mi</td>
                     <td>${voyage.duration}</td>
-                    <td><span class="source-badge">Historical</span></td>
+                    <td>${sourceLink}</td>
                 `;
             });
         }
