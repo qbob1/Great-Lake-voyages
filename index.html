@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Great Lakes Voyages & Wrecks Visualization</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #fff;
+        }
+
+        #container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1e3c72;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        #visualization {
+            background: #f0f8ff;
+            border-radius: 8px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .lake {
+            fill: #4a90e2;
+            stroke: #2a5298;
+            stroke-width: 2;
+        }
+
+        .voyage-path {
+            fill: none;
+            stroke-width: 2;
+            opacity: 0.7;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .voyage-path:hover {
+            opacity: 1;
+            stroke-width: 3;
+        }
+
+        .wreck {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .wreck:hover {
+            transform: scale(1.3);
+        }
+
+        .port {
+            fill: #333;
+            stroke: #fff;
+            stroke-width: 1.5;
+        }
+
+        .port-label {
+            font-size: 11px;
+            fill: #333;
+            font-weight: bold;
+            pointer-events: none;
+        }
+
+        #legend {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .legend-title {
+            font-weight: bold;
+            color: #1e3c72;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .legend-item {
+            display: inline-block;
+            margin-right: 20px;
+            margin-bottom: 10px;
+        }
+
+        .legend-color {
+            display: inline-block;
+            width: 30px;
+            height: 3px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        .legend-wreck {
+            display: inline-block;
+            margin-right: 20px;
+            margin-top: 10px;
+        }
+
+        .tooltip {
+            position: absolute;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            border-radius: 6px;
+            pointer-events: none;
+            opacity: 0;
+            font-size: 13px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            max-width: 300px;
+            z-index: 1000;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 150px;
+            margin: 5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Great Lakes Voyages & Shipwrecks</h1>
+        <p class="subtitle">Historical Maritime Routes (1850-1950)</p>
+
+        <div class="stats" id="stats"></div>
+
+        <div id="visualization"></div>
+
+        <div id="legend"></div>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script src="data.js"></script>
+    <script src="visualization.js"></script>
+</body>
+</html>
