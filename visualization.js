@@ -22,9 +22,11 @@ const colorScale = d3.scaleSequential()
     .interpolator(d3.interpolateViridis);
 
 // Set up projection for Great Lakes region
-// Albers projection centered on Great Lakes
-const projection = d3.geoAlbers()
-    .parallels([42, 49]);
+// Using Mercator for simplicity with manual bounds
+const projection = d3.geoMercator()
+    .center([-85, 45])
+    .scale(2000)
+    .translate([width / 2, height / 2]);
 
 // Path generator
 const path = d3.geoPath().projection(projection);
@@ -58,27 +60,17 @@ function createCurvedPath(x1, y1, x2, y2) {
 
 // Render the visualization using embedded GeoJSON data
 (function() {
-    console.log("Starting visualization render...");
-    console.log("GeoJSON data:", greatLakesGeoJSON);
-
-    // Fit the projection to the GeoJSON bounds
-    projection.fitSize([width - margin.left - margin.right, height - margin.top - margin.bottom], greatLakesGeoJSON);
-
-    console.log("Projection scale:", projection.scale());
-    console.log("Projection translate:", projection.translate());
-
     // Draw the Great Lakes
     const lakesGroup = svg.append("g").attr("class", "lakes");
 
-    const lakesPaths = lakesGroup.selectAll("path")
+    lakesGroup.selectAll("path")
         .data(greatLakesGeoJSON.features)
         .enter()
         .append("path")
-        .attr("class", "lake")
         .attr("d", path)
-        .style("fill", "#4a90e2")
-        .style("stroke", "#2a5298")
-        .style("stroke-width", "2")
+        .attr("fill", "#4a90e2")
+        .attr("stroke", "#2a5298")
+        .attr("stroke-width", 2)
         .on("mouseover", function(event, d) {
             tooltip
                 .style("opacity", 1)
@@ -89,8 +81,6 @@ function createCurvedPath(x1, y1, x2, y2) {
         .on("mouseout", function() {
             tooltip.style("opacity", 0);
         });
-
-    console.log(`Rendered ${lakesPaths.size()} lake paths with projection scale: ${projection.scale()}`);
 
     // Draw voyage routes
     const routesGroup = svg.append("g").attr("class", "routes");
