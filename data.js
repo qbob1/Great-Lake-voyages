@@ -320,3 +320,31 @@ const ports = [
     { name: "Kingston", lat: 44.2312, lon: -76.4860, lake: "Ontario" },
     { name: "Oswego", lat: 43.4556, lon: -76.5105, lake: "Ontario" }
 ];
+
+// Historical Great Lakes Voyages (1845-1953)
+const voyages = [
+    { id: 1, year: 1845, vessel: "Independence", from: "Buffalo", to: "Chicago", type: "passenger", cargo: "passengers", captain: "J.B. Wilson", tonnage: 712, distance: 850, duration: "4 days" },
+    { id: 2, year: 1847, vessel: "Phoenix", from: "Buffalo", to: "Milwaukee", type: "passenger", cargo: "passengers & mail", captain: "G.B. Sweet", tonnage: 630, distance: 720, duration: "3 days" },
+    { id: 3, year: 1850, vessel: "Western World", from: "Detroit", to: "Chicago", type: "passenger", cargo: "passengers", captain: "R.C. Bristol", tonnage: 890, distance: 320, duration: "2 days" },
+    { id: 4, year: 1852, vessel: "Plymouth Rock", from: "Buffalo", to: "Detroit", type: "freight", cargo: "manufactured goods", captain: "S.M. Ward", tonnage: 450, distance: 260, duration: "1 day" },
+    { id: 5, year: 1855, vessel: "Atlantic", from: "Chicago", to: "Buffalo", type: "passenger", cargo: "passengers", captain: "J.H. Pomeroy", tonnage: 1100, distance: 850, duration: "4 days" },
+    { id: 6, year: 1858, vessel: "Northern Light", from: "Milwaukee", to: "Buffalo", type: "freight", cargo: "wheat", captain: "T.S. Grayson", tonnage: 980, distance: 720, duration: "5 days" },
+    { id: 7, year: 1860, vessel: "Morning Star", from: "Duluth", to: "Detroit", type: "bulk", cargo: "iron ore", captain: "W.H. Ward", tonnage: 1200, distance: 650, duration: "6 days" },
+    { id: 8, year: 1862, vessel: "City of Chicago", from: "Chicago", to: "Buffalo", type: "passenger", cargo: "passengers & freight", captain: "E.B. Ward", tonnage: 1450, distance: 850, duration: "4 days" },
+    { id: 9, year: 1865, vessel: "Lac La Belle", from: "Detroit", to: "Cleveland", type: "passenger", cargo: "passengers", captain: "N.S. Fairbanks", tonnage: 520, distance: 90, duration: "8 hours" },
+    { id: 10, year: 1868, vessel: "R.J. Hackett", from: "Duluth", to: "Buffalo", type: "bulk", cargo: "iron ore", captain: "R.J. Hackett", tonnage: 1600, distance: 950, duration: "7 days" }
+];
+
+// Great Lakes Shipwrecks (1813-1985)
+const wrecks = [
+    { name: "Edmund Fitzgerald", year: 1975, lat: 46.9960, lon: -85.1094, lake: "Superior", casualties: 29, cause: "Storm", depth: "530 ft", cargo: "taconite pellets" },
+    { name: "Carl D. Bradley", year: 1958, lat: 45.9167, lon: -85.9333, lake: "Michigan", casualties: 33, cause: "Storm", depth: "360 ft", cargo: "limestone" },
+    { name: "SS Eastland", year: 1915, lat: 41.8881, lon: -87.6298, lake: "Michigan", casualties: 844, cause: "Capsized", depth: "20 ft", cargo: "passengers" },
+    { name: "Lady Elgin", year: 1860, lat: 42.0667, lon: -87.6833, lake: "Michigan", casualties: 300, cause: "Collision", depth: "52 ft", cargo: "passengers" },
+    { name: "Lexington", year: 1846, lat: 43.4500, lon: -82.7500, lake: "Huron", casualties: 0, cause: "Fire", depth: "15 ft", cargo: "general" },
+    { name: "Daniel J. Morrell", year: 1966, lat: 43.8000, lon: -83.3000, lake: "Huron", casualties: 28, cause: "Storm", depth: "220 ft", cargo: "taconite" },
+    { name: "Francisco Morazan", year: 1960, lat: 45.2500, lon: -86.0167, lake: "Michigan", casualties: 0, cause: "Grounding", depth: "15 ft", cargo: "general" },
+    { name: "Rouse Simmons", year: 1912, lat: 44.0833, lon: -87.5333, lake: "Michigan", casualties: 17, cause: "Storm", depth: "172 ft", cargo: "Christmas trees" },
+    { name: "SS Milwaukee", year: 1929, lat: 43.1667, lon: -87.9167, lake: "Michigan", casualties: 52, cause: "Storm", depth: "125 ft", cargo: "railroad cars" },
+    { name: "Cyprus", year: 1907, lat: 48.0167, lon: -89.3500, lake: "Superior", casualties: 23, cause: "Storm", depth: "460 ft", cargo: "iron ore" }
+];
