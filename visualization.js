@@ -28,15 +28,25 @@ const path = d3.geoPath().projection(projection);
 // Fit projection to the Great Lakes data
 projection.fitSize([width, height], greatLakesGeoJSON);
 
+console.log("GeoJSON features:", greatLakesGeoJSON.features.length);
+console.log("Projection scale:", projection.scale());
+console.log("Projection translate:", projection.translate());
+
 // JUST RENDER THE LAKES - NOTHING ELSE
-svg.selectAll("path")
+const lakePaths = svg.selectAll("path")
     .data(greatLakesGeoJSON.features)
     .enter()
     .append("path")
-    .attr("d", path)
+    .attr("d", d => {
+        const pathStr = path(d);
+        console.log(`Lake ${d.properties.name}: path length = ${pathStr ? pathStr.length : 'NULL'}`);
+        return pathStr;
+    })
     .attr("fill", "#4a90e2")
     .attr("stroke", "#2a5298")
     .attr("stroke-width", 2);
+
+console.log("Created", lakePaths.size(), "lake paths");
 
 // Create statistics
 const stats = d3.select("#stats");
