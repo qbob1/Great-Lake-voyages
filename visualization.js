@@ -15,12 +15,12 @@ const svg = d3.select("#visualization")
 // Create tooltip
 const tooltip = d3.select("#tooltip");
 
-// Set up projection
-const projection = d3.geoAlbersUsa()
-    .scale(1000)
-    .translate([width / 2, height / 2]);
-
+// Set up projection - use Mercator and fit to the Great Lakes bounds
+const projection = d3.geoMercator();
 const path = d3.geoPath().projection(projection);
+
+// Fit the projection to the GeoJSON bounds
+projection.fitSize([width, height], greatLakesGeoJSON);
 
 // Draw the Great Lakes
 svg.selectAll(".lake")
@@ -45,4 +45,6 @@ svg.selectAll(".lake")
         tooltip.style("opacity", 0);
     });
 
-console.log("Lakes rendered");
+console.log("Lakes rendered successfully");
+console.log("Projection scale:", projection.scale());
+console.log("Projection translate:", projection.translate());
