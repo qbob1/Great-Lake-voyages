@@ -60,13 +60,13 @@ function createCurvedPath(x1, y1, x2, y2) {
     return `M${x1},${y1} Q${cx},${cy} ${x2},${y2}`;
 }
 
-// Load GeoJSON and render
-d3.json("great-lakes.geojson").then(function(geojson) {
+// Render the visualization using embedded GeoJSON data
+(function() {
     // Draw the Great Lakes
     const lakesGroup = svg.append("g").attr("class", "lakes");
 
     lakesGroup.selectAll("path")
-        .data(geojson.features)
+        .data(greatLakesGeoJSON.features)
         .enter()
         .append("path")
         .attr("class", "lake")
@@ -202,7 +202,7 @@ d3.json("great-lakes.geojson").then(function(geojson) {
 
     console.log("Great Lakes Voyages Visualization loaded successfully!");
     console.log(`Displaying ${voyages.length} voyages and ${wrecks.length} shipwrecks`);
-});
+})();
 
 // Create statistics
 const stats = d3.select("#stats");
