@@ -82,10 +82,14 @@ voyages.forEach(voyage => {
                 tooltip
                     .style("opacity", 1)
                     .html(`
-                        <strong>${voyage.vessel}</strong> (${voyage.year})<br/>
-                        Route: ${voyage.from} → ${voyage.to}<br/>
-                        Type: ${voyage.type}<br/>
-                        Cargo: ${voyage.cargo}
+                        <strong>🚢 ${voyage.vessel}</strong> (${voyage.year})<br/>
+                        <strong>Route:</strong> ${voyage.from} → ${voyage.to}<br/>
+                        <strong>Captain:</strong> ${voyage.captain}<br/>
+                        <strong>Type:</strong> ${voyage.type}<br/>
+                        <strong>Cargo:</strong> ${voyage.cargo}<br/>
+                        <strong>Tonnage:</strong> ${voyage.tonnage.toLocaleString()} tons<br/>
+                        <strong>Distance:</strong> ${voyage.distance} miles<br/>
+                        <strong>Duration:</strong> ${voyage.duration}
                     `)
                     .style("left", (event.pageX + 10) + "px")
                     .style("top", (event.pageY - 10) + "px");
@@ -128,10 +132,12 @@ wrecksGroup.selectAll(".wreck")
             .style("opacity", 1)
             .html(`
                 <strong>⚓ ${d.name}</strong><br/>
-                Year: ${d.year}<br/>
-                Lake: ${d.lake}<br/>
-                Casualties: ${d.casualties}<br/>
-                Cause: ${d.cause}
+                <strong>Year:</strong> ${d.year}<br/>
+                <strong>Lake:</strong> ${d.lake}<br/>
+                <strong>Casualties:</strong> ${d.casualties}<br/>
+                <strong>Cause:</strong> ${d.cause}<br/>
+                <strong>Depth:</strong> ${d.depth}<br/>
+                <strong>Cargo:</strong> ${d.cargo}
             `)
             .style("left", (event.pageX + 10) + "px")
             .style("top", (event.pageY - 10) + "px");

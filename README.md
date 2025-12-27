@@ -1,15 +1,16 @@
 # Great Lakes Voyages & Shipwrecks Visualization
 
-An interactive D3.js visualization showing historical maritime routes and shipwrecks across the Great Lakes (1850-1975).
+An interactive D3.js visualization showing historical maritime routes and shipwrecks across the Great Lakes (1845-1975).
 
 ## Features
 
 - **Interactive Map**: Visual representation of all five Great Lakes (Superior, Michigan, Huron, Erie, and Ontario)
-- **Voyage Routes**: 25 historical voyages plotted with curved paths between ports
-- **Year-based Color Coding**: Routes colored using a gradient scale from 1850s to 1950s
-- **Shipwreck Markers**: 14 major shipwrecks with detailed information
-- **Interactive Tooltips**: Hover over routes, wrecks, and ports for detailed information
-- **Statistics Dashboard**: Overview of total voyages, wrecks, and casualties
+- **Voyage Routes**: 75 historical voyages plotted with curved paths between ports
+- **Year-based Color Coding**: Routes colored using a gradient scale from 1840s to 1950s
+- **Shipwreck Markers**: 60 major shipwrecks with detailed information
+- **Enhanced Tooltips**: Hover over routes to see comprehensive voyage details including captain, tonnage, distance, and duration
+- **Wreck Details**: Detailed information for each shipwreck including depth and cargo
+- **Statistics Dashboard**: Real-time overview of total voyages, wrecks, and casualties
 - **Legend**: Clear explanation of colors and symbols
 
 ## Quick Start
@@ -42,25 +43,41 @@ Great-Lake-voyages/
 ## Data Overview
 
 ### Voyages
-- **Total**: 25 historical voyages
-- **Time Period**: 1852-1950
-- **Types**: Cargo ships (grain, iron ore, lumber, coal) and passenger vessels
-- **Notable vessels**: Edmund Fitzgerald era ships, early steamships, and grain carriers
+- **Total**: 75 historical voyages
+- **Time Period**: 1845-1953
+- **Types**: Cargo ships (grain, iron ore, lumber, coal, limestone, taconite) and passenger vessels
+- **Data Includes**: Captain names, vessel tonnage, route distance, and journey duration
+- **Notable vessels**:
+  - Early steamships like Independence (1845) and Phoenix (1847)
+  - Iron ore carriers like Western Reserve, Samuel Mather, and William A. Irvin
+  - Passenger ships like Lady Elgin, Milwaukee Clipper, and Noronic
+  - Modern freighters like Edward L. Ryerson (21,000 tons) and Arthur B. Homer (14,000 tons)
 
 ### Shipwrecks
-- **Total**: 14 major wrecks
-- **Casualties**: Over 2,000 lives lost
+- **Total**: 60 major wrecks
+- **Time Span**: 1813-1985
+- **Total Casualties**: Over 3,700 lives lost
+- **Data Includes**: Wreck depth, cargo carried, and cause of sinking
 - **Notable wrecks**:
-  - **Edmund Fitzgerald** (1975): 29 casualties on Lake Superior
-  - **Eastland** (1915): 844 casualties on Lake Michigan (deadliest Great Lakes disaster)
+  - **Eastland** (1915): 844 casualties on Lake Michigan - deadliest Great Lakes disaster
   - **Lady Elgin** (1860): 300 casualties on Lake Michigan
+  - **G.P. Griffith** (1850): 286 casualties on Lake Erie
   - **Atlantic** (1852): 250 casualties on Lake Erie
+  - **Phoenix** (1847): 190 casualties on Lake Michigan
+  - **Steamship Erie** (1841): 175 casualties on Lake Erie
+  - **Ontario** (1817): 130 casualties on Lake Ontario
+  - **Pewabic** (1865): 125 casualties on Lake Huron
+  - **Noronic** (1949): 119 casualties on Lake Ontario
+  - **Edmund Fitzgerald** (1975): 29 casualties on Lake Superior
+  - **Great Storm of 1913**: Multiple vessels lost including Regina, Charles S. Price, Argus, Hydrus, and Wexford
 
 ### Ports
-19 major ports across all five lakes, including:
-- Chicago, Milwaukee, Duluth
-- Detroit, Cleveland, Buffalo
-- Toronto, Kingston, Thunder Bay
+30 major ports across all five lakes, including:
+- **Lake Superior**: Duluth, Thunder Bay, Marquette, Sault Ste. Marie, Two Harbors, Ashland
+- **Lake Michigan**: Chicago, Milwaukee, Green Bay, Traverse City, Ludington, Muskegon, Grand Haven
+- **Lake Huron**: Port Huron, Alpena, Bay City, Rogers City, Mackinaw City
+- **Lake Erie**: Detroit, Cleveland, Toledo, Buffalo, Erie, Sandusky, Ashtabula
+- **Lake Ontario**: Toronto, Rochester, Kingston, Oswego
 
 ## Technologies Used
 
@@ -82,13 +99,17 @@ Routes are colored using the **Viridis** color scale based on the voyage year:
 Edit `data.js` and add entries to the `voyages` array:
 ```javascript
 {
-    id: 26,
+    id: 76,
     year: 1960,
     vessel: "Ship Name",
     from: "Port A",
     to: "Port B",
     type: "cargo",
-    cargo: "iron ore"
+    cargo: "iron ore",
+    captain: "Captain Name",
+    tonnage: 15000,
+    distance: 800,
+    duration: "4 days"
 }
 ```
 
@@ -102,7 +123,9 @@ Edit `data.js` and add entries to the `wrecks` array:
     y: 300,
     lake: "Superior",
     casualties: 10,
-    cause: "Storm"
+    cause: "Storm",
+    depth: "200 ft",
+    cargo: "iron ore"
 }
 ```
 
