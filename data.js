@@ -595,7 +595,35 @@ const voyages = [
 
     // Historic Steam Tugs (1896-1903)
     { id: 186, year: 1896, vessel: "Edna G (steam tug)", from: "Duluth", to: "Two Harbors", type: "tugboat", cargo: "log towing", captain: "Schroeder Lumber Co.", tonnage: 85, distance: 25, duration: "4 hours", source: "https://nmgl.org/" },
-    { id: 187, year: 1903, vessel: "MFDS 15 (Tug Ohio)", from: "Milwaukee", to: "Chicago", type: "steam tug", cargo: "harbor towing", captain: "Milwaukee Fireboat", tonnage: 92, distance: 80, duration: "10 hours", source: "https://nmgl.org/tug-ohio/" }
+    { id: 187, year: 1903, vessel: "MFDS 15 (Tug Ohio)", from: "Milwaukee", to: "Chicago", type: "steam tug", cargo: "harbor towing", captain: "Milwaukee Fireboat", tonnage: 92, distance: 80, duration: "10 hours", source: "https://nmgl.org/tug-ohio/" },
+
+    // Commercial Fishing Vessels (1880-1950)
+    { id: 188, year: 1885, vessel: "Mackinaw Boat", from: "Mackinac Island", to: "St. Ignace", type: "fishing", cargo: "whitefish", captain: "Independent fisherman", tonnage: 8, distance: 5, duration: "3 hours", source: "https://www.greatlakesfisheriestrail.org/info.asp?ait=fv&fid=29" },
+    { id: 189, year: 1900, vessel: "Beaver Island (gill netter)", from: "Charlevoix", to: "Beaver Island", type: "fishing", cargo: "lake trout", captain: "James McCann", tonnage: 35, distance: 30, duration: "6 hours", source: "https://www.greatlakesfisheriestrail.org/collection.asp?ait=jv&jid=1" },
+    { id: 190, year: 1920, vessel: "Turtle Back (gill net tug)", from: "Marquette", to: "Munising", type: "fishing", cargo: "whitefish & trout", captain: "Commercial fishery", tonnage: 45, distance: 40, duration: "8 hours", source: "http://www.greatlakesfisheriestrail.org/collection.asp?ait=jv&jid=10" },
+    { id: 191, year: 1935, vessel: "Fish Haven (trap netter)", from: "Port Washington", to: "Milwaukee", type: "fishing", cargo: "perch & chub", captain: "Milwaukee Fishery", tonnage: 55, distance: 28, duration: "5 hours", source: "https://www.greatlakesfisheriestrail.org/" },
+    { id: 192, year: 1950, vessel: "Northern Light (steel tug)", from: "Two Rivers", to: "Manitowoc", type: "fishing", cargo: "gill nets", captain: "Commercial fishery", tonnage: 65, distance: 15, duration: "3 hours", source: "https://en.wikipedia.org/wiki/Fish_tug" },
+
+    // Excursion Steamers & Pleasure Boats (1890-1930)
+    { id: 193, year: 1890, vessel: "Frank E. Kirby", from: "Detroit", to: "Put-in-Bay", type: "excursion", cargo: "tourists", captain: "Detroit & Cleveland Nav.", tonnage: 850, distance: 60, duration: "3 hours", source: "https://navalmarinearchive.com/research/docs/great_lakes_steam1.html" },
+    { id: 194, year: 1892, vessel: "City of Toledo", from: "Toledo", to: "Put-in-Bay", type: "excursion", cargo: "tourists", captain: "Toledo & Islands Steamship", tonnage: 920, distance: 40, duration: "2 hours", source: "https://en.wikipedia.org/wiki/Great_Lakes_passenger_steamers" },
+    { id: 195, year: 1902, vessel: "Pleasure", from: "Detroit", to: "Tashmoo Park", type: "excursion", cargo: "day trippers", captain: "White Star Line", tonnage: 780, distance: 15, duration: "1 hour", source: "https://historicdetroit.org/buildings/pleasure" },
+    { id: 196, year: 1910, vessel: "Ste. Claire", from: "Detroit", to: "Bob-Lo Island", type: "excursion", cargo: "tourists", captain: "Detroit, Belle Isle & Windsor Ferry", tonnage: 1200, distance: 18, duration: "1.5 hours", source: "https://meanderingmichiganhistory.weebly.com/frank-kirbys-great-lakes-legacy-and-the-bob-lo-boats.html" },
+    { id: 197, year: 1910, vessel: "Columbia", from: "Detroit", to: "Bob-Lo Island", type: "excursion", cargo: "tourists", captain: "Detroit, Belle Isle & Windsor Ferry", tonnage: 1185, distance: 18, duration: "1.5 hours", source: "https://meanderingmichiganhistory.weebly.com/frank-kirbys-great-lakes-legacy-and-the-bob-lo-boats.html" },
+    { id: 198, year: 1915, vessel: "Put-in-Bay", from: "Sandusky", to: "Put-in-Bay", type: "excursion", cargo: "tourists", captain: "Ashley & Dustin Line", tonnage: 650, distance: 25, duration: "1.5 hours", source: "https://en.wikipedia.org/wiki/Great_Lakes_passenger_steamers" },
+    { id: 199, year: 1925, vessel: "South Shore", from: "Chicago", to: "Michigan City", type: "excursion", cargo: "beach tourists", captain: "Chicago excursions", tonnage: 485, distance: 40, duration: "2 hours", source: "https://thumbwind.com/2019/11/22/great-lakes-cruising/" },
+
+    // Coast Guard Icebreakers & Winter Navigation (1944-1980)
+    { id: 200, year: 1944, vessel: "USCGC Mackinaw (WAGB-83)", from: "Cheboygan", to: "Sault Ste. Marie", type: "icebreaker", cargo: "winter navigation", captain: "US Coast Guard", tonnage: 5252, distance: 80, duration: "variable", source: "https://en.wikipedia.org/wiki/USCGC_Mackinaw_(WAGB-83)" },
+    { id: 201, year: 1945, vessel: "USCGC Escanaba", from: "Toledo", to: "Detroit", type: "light icebreaker", cargo: "ice breaking", captain: "US Coast Guard", tonnage: 1005, distance: 50, duration: "variable", source: "https://ss.sites.mtu.edu/mhugl/2015/10/11/the-building-and-services-of-the-uscgc-mackinaw-ice-breaker/" },
+    { id: 202, year: 1946, vessel: "USCGC Tahoma", from: "Cleveland", to: "Buffalo", type: "light icebreaker", cargo: "shipping lane clearing", captain: "US Coast Guard", tonnage: 1025, distance: 185, duration: "variable", source: "https://ss.sites.mtu.edu/mhugl/2015/10/11/the-building-and-services-of-the-uscgc-mackinaw-ice-breaker/" },
+    { id: 203, year: 1968, vessel: "USCGC Westwind", from: "Duluth", to: "Sault Ste. Marie", type: "icebreaker", cargo: "winter operations", captain: "US Coast Guard", tonnage: 3500, distance: 380, duration: "variable", source: "https://www.themackinaw.org/about-us/history/" },
+    { id: 204, year: 1975, vessel: "USCGC Mackinaw (winter ops)", from: "Detroit", to: "Duluth", type: "icebreaker", cargo: "extending shipping season", captain: "US Coast Guard", tonnage: 5252, distance: 650, duration: "variable", source: "https://www.themackinaw.org/about-us/history/" },
+
+    // Mackinaw Boats & Early Fishing Craft (1870-1900)
+    { id: 205, year: 1875, vessel: "Northern Star (mackinaw)", from: "Manistique", to: "Escanaba", type: "fishing", cargo: "whitefish", captain: "Independent fisherman", tonnage: 6, distance: 45, duration: "8 hours", source: "https://www.greatlakesfisheriestrail.org/info.asp?ait=fv&fid=29" },
+    { id: 206, year: 1890, vessel: "Lake Breeze (gill netter)", from: "Kenosha", to: "Racine", type: "fishing", cargo: "perch", captain: "Wisconsin fishery", tonnage: 28, distance: 20, duration: "4 hours", source: "https://www.michigan.gov/dnr/managing-resources/fisheries/business/commercial/history-of-state-licensed-great-lakes-commercial-fishing" },
+    { id: 207, year: 1895, vessel: "Island Queen (trap net)", from: "Washington Island", to: "Sturgeon Bay", type: "fishing", cargo: "lake trout", captain: "Door County Fishery", tonnage: 38, distance: 35, duration: "6 hours", source: "https://www.greatlakesfisheriestrail.org/" }
 ];
 
 // Great Lakes Shipwrecks (1813-1985)
