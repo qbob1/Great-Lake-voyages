@@ -21,10 +21,24 @@ const colorScale = d3.scaleSequential()
     .domain(yearExtent)
     .interpolator(d3.interpolateViridis);
 
-// Helper function to get port coordinates
+// Set up projection for Great Lakes region
+// Albers projection centered on Great Lakes
+const projection = d3.geoAlbers()
+    .center([-85, 45])
+    .rotate([0, 0])
+    .parallels([42, 49])
+    .scale(2800)
+    .translate([width / 2, height / 2]);
+
+// Path generator
+const path = d3.geoPath().projection(projection);
+
+// Helper function to get port coordinates (projected)
 function getPortCoords(portName) {
     const port = ports.find(p => p.name === portName);
-    return port ? { x: port.x, y: port.y } : null;
+    if (!port) return null;
+    const coords = projection([port.lon, port.lat]);
+    return { x: coords[0], y: coords[1] };
 }
 
 // Helper function to create curved path between two points
@@ -46,139 +60,149 @@ function createCurvedPath(x1, y1, x2, y2) {
     return `M${x1},${y1} Q${cx},${cy} ${x2},${y2}`;
 }
 
-// Draw the Great Lakes
-const lakesGroup = svg.append("g").attr("class", "lakes");
+// Load GeoJSON and render
+d3.json("great-lakes.geojson").then(function(geojson) {
+    // Draw the Great Lakes
+    const lakesGroup = svg.append("g").attr("class", "lakes");
 
-greatLakes.forEach(lake => {
-    lakesGroup.append("path")
+    lakesGroup.selectAll("path")
+        .data(geojson.features)
+        .enter()
+        .append("path")
         .attr("class", "lake")
-        .attr("d", d3.line()(lake.coordinates))
-        .on("mouseover", function(event) {
+        .attr("d", path)
+        .on("mouseover", function(event, d) {
             tooltip
                 .style("opacity", 1)
-                .html(`<strong>${lake.name}</strong>`)
+                .html(`<strong>${d.properties.name}</strong><br/>Area: ${d.properties.area_km2.toLocaleString()} km²`)
                 .style("left", (event.pageX + 10) + "px")
                 .style("top", (event.pageY - 10) + "px");
         })
         .on("mouseout", function() {
             tooltip.style("opacity", 0);
         });
-});
 
-// Draw voyage routes
-const routesGroup = svg.append("g").attr("class", "routes");
+    // Draw voyage routes
+    const routesGroup = svg.append("g").attr("class", "routes");
 
-voyages.forEach(voyage => {
-    const from = getPortCoords(voyage.from);
-    const to = getPortCoords(voyage.to);
+    voyages.forEach(voyage => {
+        const from = getPortCoords(voyage.from);
+        const to = getPortCoords(voyage.to);
 
-    if (from && to) {
-        const path = routesGroup.append("path")
-            .attr("class", "voyage-path")
-            .attr("d", createCurvedPath(from.x, from.y, to.x, to.y))
-            .attr("stroke", colorScale(voyage.year))
-            .on("mouseover", function(event) {
-                d3.select(this).style("stroke-width", "4");
-                tooltip
-                    .style("opacity", 1)
-                    .html(`
-                        <strong>🚢 ${voyage.vessel}</strong> (${voyage.year})<br/>
-                        <strong>Route:</strong> ${voyage.from} → ${voyage.to}<br/>
-                        <strong>Captain:</strong> ${voyage.captain}<br/>
-                        <strong>Type:</strong> ${voyage.type}<br/>
-                        <strong>Cargo:</strong> ${voyage.cargo}<br/>
-                        <strong>Tonnage:</strong> ${voyage.tonnage.toLocaleString()} tons<br/>
-                        <strong>Distance:</strong> ${voyage.distance} miles<br/>
-                        <strong>Duration:</strong> ${voyage.duration}
-                    `)
-                    .style("left", (event.pageX + 10) + "px")
-                    .style("top", (event.pageY - 10) + "px");
-            })
-            .on("mouseout", function() {
-                d3.select(this).style("stroke-width", "2");
-                tooltip.style("opacity", 0);
-            });
-    }
-});
-
-// Draw wrecks
-const wrecksGroup = svg.append("g").attr("class", "wrecks");
-
-wrecksGroup.selectAll(".wreck")
-    .data(wrecks)
-    .enter()
-    .append("g")
-    .attr("class", "wreck")
-    .attr("transform", d => `translate(${d.x},${d.y})`)
-    .each(function(d) {
-        const g = d3.select(this);
-
-        // Wreck symbol - X mark
-        g.append("path")
-            .attr("d", "M-6,-6 L6,6 M-6,6 L6,-6")
-            .attr("stroke", "#d32f2f")
-            .attr("stroke-width", 3)
-            .attr("fill", "none");
-
-        // Circle background
-        g.append("circle")
-            .attr("r", 8)
-            .attr("fill", "none")
-            .attr("stroke", "#d32f2f")
-            .attr("stroke-width", 2);
-    })
-    .on("mouseover", function(event, d) {
-        tooltip
-            .style("opacity", 1)
-            .html(`
-                <strong>⚓ ${d.name}</strong><br/>
-                <strong>Year:</strong> ${d.year}<br/>
-                <strong>Lake:</strong> ${d.lake}<br/>
-                <strong>Casualties:</strong> ${d.casualties}<br/>
-                <strong>Cause:</strong> ${d.cause}<br/>
-                <strong>Depth:</strong> ${d.depth}<br/>
-                <strong>Cargo:</strong> ${d.cargo}
-            `)
-            .style("left", (event.pageX + 10) + "px")
-            .style("top", (event.pageY - 10) + "px");
-    })
-    .on("mouseout", function() {
-        tooltip.style("opacity", 0);
+        if (from && to) {
+            const pathElem = routesGroup.append("path")
+                .attr("class", "voyage-path")
+                .attr("d", createCurvedPath(from.x, from.y, to.x, to.y))
+                .attr("stroke", colorScale(voyage.year))
+                .on("mouseover", function(event) {
+                    d3.select(this).style("stroke-width", "4");
+                    tooltip
+                        .style("opacity", 1)
+                        .html(`
+                            <strong>🚢 ${voyage.vessel}</strong> (${voyage.year})<br/>
+                            <strong>Route:</strong> ${voyage.from} → ${voyage.to}<br/>
+                            <strong>Captain:</strong> ${voyage.captain}<br/>
+                            <strong>Type:</strong> ${voyage.type}<br/>
+                            <strong>Cargo:</strong> ${voyage.cargo}<br/>
+                            <strong>Tonnage:</strong> ${voyage.tonnage.toLocaleString()} tons<br/>
+                            <strong>Distance:</strong> ${voyage.distance} miles<br/>
+                            <strong>Duration:</strong> ${voyage.duration}
+                        `)
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 10) + "px");
+                })
+                .on("mouseout", function() {
+                    d3.select(this).style("stroke-width", "2");
+                    tooltip.style("opacity", 0);
+                });
+        }
     });
 
-// Draw ports
-const portsGroup = svg.append("g").attr("class", "ports");
+    // Draw wrecks
+    const wrecksGroup = svg.append("g").attr("class", "wrecks");
 
-portsGroup.selectAll(".port")
-    .data(ports)
-    .enter()
-    .append("circle")
-    .attr("class", "port")
-    .attr("cx", d => d.x)
-    .attr("cy", d => d.y)
-    .attr("r", 4)
-    .on("mouseover", function(event, d) {
-        tooltip
-            .style("opacity", 1)
-            .html(`<strong>Port: ${d.name}</strong><br/>Lake: ${d.lake}`)
-            .style("left", (event.pageX + 10) + "px")
-            .style("top", (event.pageY - 10) + "px");
-    })
-    .on("mouseout", function() {
-        tooltip.style("opacity", 0);
-    });
+    wrecksGroup.selectAll(".wreck")
+        .data(wrecks)
+        .enter()
+        .append("g")
+        .attr("class", "wreck")
+        .attr("transform", d => {
+            const coords = projection([d.lon, d.lat]);
+            return `translate(${coords[0]},${coords[1]})`;
+        })
+        .each(function(d) {
+            const g = d3.select(this);
 
-// Add port labels for major ports
-const majorPorts = ["Chicago", "Detroit", "Cleveland", "Buffalo", "Duluth", "Milwaukee", "Toronto"];
-portsGroup.selectAll(".port-label")
-    .data(ports.filter(p => majorPorts.includes(p.name)))
-    .enter()
-    .append("text")
-    .attr("class", "port-label")
-    .attr("x", d => d.x)
-    .attr("y", d => d.y - 10)
-    .attr("text-anchor", "middle")
-    .text(d => d.name);
+            // Wreck symbol - X mark
+            g.append("path")
+                .attr("d", "M-6,-6 L6,6 M-6,6 L6,-6")
+                .attr("stroke", "#d32f2f")
+                .attr("stroke-width", 3)
+                .attr("fill", "none");
+
+            // Circle background
+            g.append("circle")
+                .attr("r", 8)
+                .attr("fill", "none")
+                .attr("stroke", "#d32f2f")
+                .attr("stroke-width", 2);
+        })
+        .on("mouseover", function(event, d) {
+            tooltip
+                .style("opacity", 1)
+                .html(`
+                    <strong>⚓ ${d.name}</strong><br/>
+                    <strong>Year:</strong> ${d.year}<br/>
+                    <strong>Lake:</strong> ${d.lake}<br/>
+                    <strong>Casualties:</strong> ${d.casualties}<br/>
+                    <strong>Cause:</strong> ${d.cause}<br/>
+                    <strong>Depth:</strong> ${d.depth}<br/>
+                    <strong>Cargo:</strong> ${d.cargo}
+                `)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 10) + "px");
+        })
+        .on("mouseout", function() {
+            tooltip.style("opacity", 0);
+        });
+
+    // Draw ports
+    const portsGroup = svg.append("g").attr("class", "ports");
+
+    portsGroup.selectAll(".port")
+        .data(ports)
+        .enter()
+        .append("circle")
+        .attr("class", "port")
+        .attr("cx", d => projection([d.lon, d.lat])[0])
+        .attr("cy", d => projection([d.lon, d.lat])[1])
+        .attr("r", 4)
+        .on("mouseover", function(event, d) {
+            tooltip
+                .style("opacity", 1)
+                .html(`<strong>Port: ${d.name}</strong><br/>Lake: ${d.lake}`)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 10) + "px");
+        })
+        .on("mouseout", function() {
+            tooltip.style("opacity", 0);
+        });
+
+    // Add port labels for major ports
+    const majorPorts = ["Chicago", "Detroit", "Cleveland", "Buffalo", "Duluth", "Milwaukee", "Toronto"];
+    portsGroup.selectAll(".port-label")
+        .data(ports.filter(p => majorPorts.includes(p.name)))
+        .enter()
+        .append("text")
+        .attr("class", "port-label")
+        .attr("x", d => projection([d.lon, d.lat])[0])
+        .attr("y", d => projection([d.lon, d.lat])[1] - 10)
+        .attr("text-anchor", "middle")
+        .text(d => d.name);
+
+    console.log("Great Lakes Voyages Visualization loaded successfully!");
+    console.log(`Displaying ${voyages.length} voyages and ${wrecks.length} shipwrecks`);
+});
 
 // Create statistics
 const stats = d3.select("#stats");
@@ -239,6 +263,3 @@ legend.append("div")
         </svg>
         <span style="color: #333; font-weight: bold;">Major Port</span>
     `);
-
-console.log("Great Lakes Voyages Visualization loaded successfully!");
-console.log(`Displaying ${voyages.length} voyages and ${wrecks.length} shipwrecks`);

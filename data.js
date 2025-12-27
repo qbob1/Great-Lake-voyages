@@ -1,85 +1,43 @@
-// Great Lakes outline data (simplified coordinates)
-const greatLakes = [
-    {
-        name: "Lake Superior",
-        coordinates: [
-            [220, 80], [380, 60], [480, 100], [520, 150], [500, 200],
-            [420, 220], [320, 210], [240, 180], [180, 140], [220, 80]
-        ]
-    },
-    {
-        name: "Lake Michigan",
-        coordinates: [
-            [280, 250], [320, 230], [350, 260], [370, 320], [380, 400],
-            [360, 480], [320, 520], [280, 500], [260, 450], [250, 380],
-            [260, 320], [280, 250]
-        ]
-    },
-    {
-        name: "Lake Huron",
-        coordinates: [
-            [420, 240], [500, 220], [550, 250], [580, 300], [570, 360],
-            [540, 400], [500, 420], [460, 400], [440, 360], [430, 320],
-            [420, 280], [420, 240]
-        ]
-    },
-    {
-        name: "Lake Erie",
-        coordinates: [
-            [500, 440], [540, 430], [620, 445], [700, 460], [740, 470],
-            [740, 490], [680, 500], [600, 495], [520, 485], [500, 470],
-            [500, 440]
-        ]
-    },
-    {
-        name: "Lake Ontario",
-        coordinates: [
-            [740, 490], [820, 480], [880, 485], [900, 500], [890, 520],
-            [840, 530], [780, 525], [740, 515], [740, 490]
-        ]
-    }
-];
-
-// Major ports
+// Major ports with real geographic coordinates (latitude, longitude)
 const ports = [
     // Lake Superior
-    { name: "Duluth", x: 240, y: 180, lake: "Superior" },
-    { name: "Thunder Bay", x: 360, y: 90, lake: "Superior" },
-    { name: "Sault Ste. Marie", x: 500, y: 210, lake: "Superior" },
-    { name: "Marquette", x: 340, y: 200, lake: "Superior" },
-    { name: "Ashland", x: 280, y: 160, lake: "Superior" },
-    { name: "Two Harbors", x: 260, y: 140, lake: "Superior" },
+    { name: "Duluth", lat: 46.7867, lon: -92.1005, lake: "Superior" },
+    { name: "Thunder Bay", lat: 48.3809, lon: -89.2477, lake: "Superior" },
+    { name: "Sault Ste. Marie", lat: 46.4953, lon: -84.3453, lake: "Superior" },
+    { name: "Marquette", lat: 46.5436, lon: -87.3954, lake: "Superior" },
+    { name: "Ashland", lat: 46.5847, lon: -90.8857, lake: "Superior" },
+    { name: "Two Harbors", lat: 47.0227, lon: -91.6707, lake: "Superior" },
 
     // Lake Michigan
-    { name: "Milwaukee", x: 300, y: 410, lake: "Michigan" },
-    { name: "Chicago", x: 290, y: 500, lake: "Michigan" },
-    { name: "Green Bay", x: 310, y: 290, lake: "Michigan" },
-    { name: "Traverse City", x: 320, y: 320, lake: "Michigan" },
-    { name: "Ludington", x: 310, y: 360, lake: "Michigan" },
-    { name: "Muskegon", x: 300, y: 380, lake: "Michigan" },
-    { name: "Grand Haven", x: 295, y: 400, lake: "Michigan" },
+    { name: "Milwaukee", lat: 43.0389, lon: -87.9065, lake: "Michigan" },
+    { name: "Chicago", lat: 41.8781, lon: -87.6298, lake: "Michigan" },
+    { name: "Green Bay", lat: 44.5133, lon: -88.0133, lake: "Michigan" },
+    { name: "Traverse City", lat: 44.7631, lon: -85.6206, lake: "Michigan" },
+    { name: "Ludington", lat: 43.9553, lon: -86.4526, lake: "Michigan" },
+    { name: "Muskegon", lat: 43.2342, lon: -86.2484, lake: "Michigan" },
+    { name: "Grand Haven", lat: 43.0631, lon: -86.2284, lake: "Michigan" },
 
     // Lake Huron
-    { name: "Alpena", x: 460, y: 340, lake: "Huron" },
-    { name: "Port Huron", x: 510, y: 430, lake: "Huron" },
-    { name: "Mackinaw City", x: 430, y: 280, lake: "Huron" },
-    { name: "Bay City", x: 490, y: 390, lake: "Huron" },
-    { name: "Rogers City", x: 480, y: 310, lake: "Huron" },
+    { name: "Alpena", lat: 45.0617, lon: -83.4327, lake: "Huron" },
+    { name: "Port Huron", lat: 42.9709, lon: -82.4249, lake: "Huron" },
+    { name: "Mackinaw City", lat: 45.7772, lon: -84.7294, lake: "Huron" },
+    { name: "Bay City", lat: 43.5945, lon: -83.8889, lake: "Huron" },
+    { name: "Rogers City", lat: 45.4214, lon: -83.8185, lake: "Huron" },
 
     // Lake Erie
-    { name: "Detroit", x: 520, y: 460, lake: "Erie" },
-    { name: "Toledo", x: 560, y: 475, lake: "Erie" },
-    { name: "Cleveland", x: 640, y: 485, lake: "Erie" },
-    { name: "Buffalo", x: 730, y: 480, lake: "Erie" },
-    { name: "Erie", x: 690, y: 475, lake: "Erie" },
-    { name: "Sandusky", x: 600, y: 480, lake: "Erie" },
-    { name: "Ashtabula", x: 670, y: 482, lake: "Erie" },
+    { name: "Detroit", lat: 42.3314, lon: -83.0458, lake: "Erie" },
+    { name: "Toledo", lat: 41.6528, lon: -83.5379, lake: "Erie" },
+    { name: "Cleveland", lat: 41.4993, lon: -81.6944, lake: "Erie" },
+    { name: "Buffalo", lat: 42.8864, lon: -78.8784, lake: "Erie" },
+    { name: "Erie", lat: 42.1292, lon: -80.0851, lake: "Erie" },
+    { name: "Sandusky", lat: 41.4489, lon: -82.7088, lake: "Erie" },
+    { name: "Ashtabula", lat: 41.8651, lon: -80.7898, lake: "Erie" },
 
     // Lake Ontario
-    { name: "Rochester", x: 800, y: 510, lake: "Ontario" },
-    { name: "Toronto", x: 770, y: 505, lake: "Ontario" },
-    { name: "Kingston", x: 880, y: 505, lake: "Ontario" },
-    { name: "Oswego", x: 840, y: 515, lake: "Ontario" }
+    { name: "Rochester", lat: 43.1566, lon: -77.6088, lake: "Ontario" },
+    { name: "Toronto", lat: 43.6532, lon: -79.3832, lake: "Ontario" },
+    { name: "Kingston", lat: 44.2312, lon: -76.4860, lake: "Ontario" },
+    { name: "Oswego", lat: 43.4556, lon: -76.5105, lake: "Ontario" }
 ];
 
 // Historical voyages with routes
@@ -178,71 +136,71 @@ const voyages = [
     { id: 75, year: 1953, vessel: "John G. Munson", from: "Two Harbors", to: "Cleveland", type: "cargo", cargo: "iron ore", captain: "William Murphy", tonnage: 18000, distance: 850, duration: "4 days" }
 ];
 
-// Historical shipwrecks
+// Historical shipwrecks with real geographic coordinates (latitude, longitude)
 const wrecks = [
     // Lake Superior wrecks
-    { name: "Edmund Fitzgerald", year: 1975, x: 360, y: 150, lake: "Superior", casualties: 29, cause: "Storm", depth: "530 ft", cargo: "taconite pellets" },
-    { name: "SS Kamloops", year: 1927, x: 380, y: 100, lake: "Superior", casualties: 22, cause: "Storm", depth: "270 ft", cargo: "general freight" },
-    { name: "Cyprus", year: 1907, x: 300, y: 130, lake: "Superior", casualties: 7, cause: "Storm", depth: "460 ft", cargo: "iron ore" },
-    { name: "Emperor", year: 1947, x: 430, y: 170, lake: "Superior", casualties: 12, cause: "Collision", depth: "175 ft", cargo: "iron ore" },
-    { name: "Henry B. Smith", year: 1913, x: 340, y: 190, lake: "Superior", casualties: 25, cause: "Storm", depth: "535 ft", cargo: "iron ore" },
-    { name: "Bannockburn", year: 1902, x: 420, y: 140, lake: "Superior", casualties: 21, cause: "Storm", depth: "unknown", cargo: "grain" },
-    { name: "SS Gunilda", year: 1911, x: 450, y: 110, lake: "Superior", casualties: 0, cause: "Grounded", depth: "240 ft", cargo: "none" },
-    { name: "Metropolis", year: 1886, x: 280, y: 170, lake: "Superior", casualties: 0, cause: "Storm", depth: "65 ft", cargo: "wheat" },
-    { name: "SS America", year: 1928, x: 490, y: 180, lake: "Superior", casualties: 0, cause: "Grounded", depth: "shallow", cargo: "none" },
-    { name: "Benjamin Noble", year: 1914, x: 310, y: 160, lake: "Superior", casualties: 20, cause: "Storm", depth: "210 ft", cargo: "iron ore" },
+    { name: "Edmund Fitzgerald", year: 1975, lat: 46.9960, lon: -85.1094, lake: "Superior", casualties: 29, cause: "Storm", depth: "530 ft", cargo: "taconite pellets" },
+    { name: "SS Kamloops", year: 1927, lat: 48.1167, lon: -88.4667, lake: "Superior", casualties: 22, cause: "Storm", depth: "270 ft", cargo: "general freight" },
+    { name: "Cyprus", year: 1907, lat: 47.3556, lon: -89.9333, lake: "Superior", casualties: 7, cause: "Storm", depth: "460 ft", cargo: "iron ore" },
+    { name: "Emperor", year: 1947, lat: 47.0333, lon: -85.0167, lake: "Superior", casualties: 12, cause: "Collision", depth: "175 ft", cargo: "iron ore" },
+    { name: "Henry B. Smith", year: 1913, lat: 46.7333, lon: -87.5833, lake: "Superior", casualties: 25, cause: "Storm", depth: "535 ft", cargo: "iron ore" },
+    { name: "Bannockburn", year: 1902, lat: 47.8500, lon: -87.3500, lake: "Superior", casualties: 21, cause: "Storm", depth: "unknown", cargo: "grain" },
+    { name: "SS Gunilda", year: 1911, lat: 48.7500, lon: -88.5833, lake: "Superior", casualties: 0, cause: "Grounded", depth: "240 ft", cargo: "none" },
+    { name: "Metropolis", year: 1886, lat: 46.9667, lon: -90.6667, lake: "Superior", casualties: 0, cause: "Storm", depth: "65 ft", cargo: "wheat" },
+    { name: "SS America", year: 1928, lat: 47.7500, lon: -85.5333, lake: "Superior", casualties: 0, cause: "Grounded", depth: "shallow", cargo: "none" },
+    { name: "Benjamin Noble", year: 1914, lat: 47.1667, lon: -90.0833, lake: "Superior", casualties: 20, cause: "Storm", depth: "210 ft", cargo: "iron ore" },
 
     // Lake Michigan wrecks
-    { name: "Lady Elgin", year: 1860, x: 305, y: 380, lake: "Michigan", casualties: 300, cause: "Collision", depth: "52 ft", cargo: "passengers" },
-    { name: "Eastland", year: 1915, x: 292, y: 502, lake: "Michigan", casualties: 844, cause: "Capsized", depth: "18 ft", cargo: "passengers" },
-    { name: "Carl D. Bradley", year: 1958, x: 330, y: 250, lake: "Michigan", casualties: 33, cause: "Storm", depth: "360 ft", cargo: "limestone" },
-    { name: "Chicora", year: 1895, x: 315, y: 340, lake: "Michigan", casualties: 24, cause: "Storm", depth: "unknown", cargo: "passengers" },
-    { name: "Rouse Simmons", year: 1912, x: 325, y: 300, lake: "Michigan", casualties: 17, cause: "Storm", depth: "165 ft", cargo: "Christmas trees" },
-    { name: "Alpena", year: 1880, x: 295, y: 360, lake: "Michigan", casualties: 60, cause: "Storm", depth: "unknown", cargo: "general freight" },
-    { name: "Phoenix", year: 1847, x: 308, y: 430, lake: "Michigan", casualties: 190, cause: "Fire", depth: "shallow", cargo: "immigrants" },
-    { name: "Seabird", year: 1868, x: 318, y: 310, lake: "Michigan", casualties: 70, cause: "Fire", depth: "unknown", cargo: "passengers" },
-    { name: "Andaste", year: 1929, x: 335, y: 280, lake: "Michigan", casualties: 25, cause: "Storm", depth: "280 ft", cargo: "iron ore" },
-    { name: "Francisco Morazan", year: 1960, x: 345, y: 265, lake: "Michigan", casualties: 0, cause: "Grounded", depth: "shallow", cargo: "general freight" },
-    { name: "Wisconsin", year: 1929, x: 285, y: 460, lake: "Michigan", casualties: 0, cause: "Collision", depth: "35 ft", cargo: "grain" },
-    { name: "W.H. Gilcher", year: 1892, x: 355, y: 290, lake: "Michigan", casualties: 21, cause: "Storm", depth: "unknown", cargo: "coal" },
+    { name: "Lady Elgin", year: 1860, lat: 42.1500, lon: -87.6667, lake: "Michigan", casualties: 300, cause: "Collision", depth: "52 ft", cargo: "passengers" },
+    { name: "Eastland", year: 1915, lat: 41.8881, lon: -87.6198, lake: "Michigan", casualties: 844, cause: "Capsized", depth: "18 ft", cargo: "passengers" },
+    { name: "Carl D. Bradley", year: 1958, lat: 45.7833, lon: -85.8667, lake: "Michigan", casualties: 33, cause: "Storm", depth: "360 ft", cargo: "limestone" },
+    { name: "Chicora", year: 1895, lat: 43.9167, lon: -86.4167, lake: "Michigan", casualties: 24, cause: "Storm", depth: "unknown", cargo: "passengers" },
+    { name: "Rouse Simmons", year: 1912, lat: 44.9667, lon: -87.1500, lake: "Michigan", casualties: 17, cause: "Storm", depth: "165 ft", cargo: "Christmas trees" },
+    { name: "Alpena", year: 1880, lat: 43.6000, lon: -86.3500, lake: "Michigan", casualties: 60, cause: "Storm", depth: "unknown", cargo: "general freight" },
+    { name: "Phoenix", year: 1847, lat: 43.8500, lon: -87.5000, lake: "Michigan", casualties: 190, cause: "Fire", depth: "shallow", cargo: "immigrants" },
+    { name: "Seabird", year: 1868, lat: 44.6667, lon: -86.0667, lake: "Michigan", casualties: 70, cause: "Fire", depth: "unknown", cargo: "passengers" },
+    { name: "Andaste", year: 1929, lat: 45.5667, lon: -86.5167, lake: "Michigan", casualties: 25, cause: "Storm", depth: "280 ft", cargo: "iron ore" },
+    { name: "Francisco Morazan", year: 1960, lat: 45.8367, lon: -86.0667, lake: "Michigan", casualties: 0, cause: "Grounded", depth: "shallow", cargo: "general freight" },
+    { name: "Wisconsin", year: 1929, lat: 42.6333, lon: -87.8667, lake: "Michigan", casualties: 0, cause: "Collision", depth: "35 ft", cargo: "grain" },
+    { name: "W.H. Gilcher", year: 1892, lat: 44.2000, lon: -86.3333, lake: "Michigan", casualties: 21, cause: "Storm", depth: "unknown", cargo: "coal" },
 
     // Lake Huron wrecks
-    { name: "Alpena", year: 1880, x: 470, y: 350, lake: "Huron", casualties: 60, cause: "Storm", depth: "unknown", cargo: "general freight" },
-    { name: "Daniel J. Morrell", year: 1966, x: 490, y: 320, lake: "Huron", casualties: 28, cause: "Broke in half", depth: "220 ft", cargo: "taconite" },
-    { name: "Cedarville", year: 1965, x: 445, y: 270, lake: "Huron", casualties: 10, cause: "Collision", depth: "100 ft", cargo: "limestone" },
-    { name: "Regina", year: 1913, x: 560, y: 340, lake: "Huron", casualties: 28, cause: "Storm", depth: "80 ft", cargo: "general freight" },
-    { name: "Charles S. Price", year: 1913, x: 520, y: 370, lake: "Huron", casualties: 28, cause: "Storm", depth: "30 ft", cargo: "coal" },
-    { name: "Argus", year: 1913, x: 540, y: 310, lake: "Huron", casualties: 25, cause: "Storm", depth: "50 ft", cargo: "coal" },
-    { name: "Hydrus", year: 1913, x: 510, y: 330, lake: "Huron", casualties: 25, cause: "Storm", depth: "unknown", cargo: "iron ore" },
-    { name: "John A. McGean", year: 1913, x: 535, y: 290, lake: "Huron", casualties: 28, cause: "Storm", depth: "unknown", cargo: "coal" },
-    { name: "Wexford", year: 1913, x: 465, y: 305, lake: "Huron", casualties: 20, cause: "Storm", depth: "85 ft", cargo: "grain" },
-    { name: "Pewabic", year: 1865, x: 455, y: 285, lake: "Huron", casualties: 125, cause: "Collision", depth: "165 ft", cargo: "copper ore" },
-    { name: "Marquette", year: 1868, x: 480, y: 360, lake: "Huron", casualties: 14, cause: "Collision", depth: "shallow", cargo: "iron ore" },
-    { name: "Sandusky", year: 1856, x: 500, y: 345, lake: "Huron", casualties: 0, cause: "Fire", depth: "shallow", cargo: "general freight" },
+    { name: "Alpena", year: 1880, lat: 44.9000, lon: -83.1000, lake: "Huron", casualties: 60, cause: "Storm", depth: "unknown", cargo: "general freight" },
+    { name: "Daniel J. Morrell", year: 1966, lat: 43.8167, lon: -82.8833, lake: "Huron", casualties: 28, cause: "Broke in half", depth: "220 ft", cargo: "taconite" },
+    { name: "Cedarville", year: 1965, lat: 45.8333, lon: -84.8333, lake: "Huron", casualties: 10, cause: "Collision", depth: "100 ft", cargo: "limestone" },
+    { name: "Regina", year: 1913, lat: 43.4667, lon: -82.2167, lake: "Huron", casualties: 28, cause: "Storm", depth: "80 ft", cargo: "general freight" },
+    { name: "Charles S. Price", year: 1913, lat: 43.6333, lon: -82.5833, lake: "Huron", casualties: 28, cause: "Storm", depth: "30 ft", cargo: "coal" },
+    { name: "Argus", year: 1913, lat: 44.6833, lon: -83.3000, lake: "Huron", casualties: 25, cause: "Storm", depth: "50 ft", cargo: "coal" },
+    { name: "Hydrus", year: 1913, lat: 44.1333, lon: -83.0333, lake: "Huron", casualties: 25, cause: "Storm", depth: "unknown", cargo: "iron ore" },
+    { name: "John A. McGean", year: 1913, lat: 45.2500, lon: -83.5667, lake: "Huron", casualties: 28, cause: "Storm", depth: "unknown", cargo: "coal" },
+    { name: "Wexford", year: 1913, lat: 45.1167, lon: -83.9333, lake: "Huron", casualties: 20, cause: "Storm", depth: "85 ft", cargo: "grain" },
+    { name: "Pewabic", year: 1865, lat: 45.9000, lon: -84.6667, lake: "Huron", casualties: 125, cause: "Collision", depth: "165 ft", cargo: "copper ore" },
+    { name: "Marquette", year: 1868, lat: 44.5000, lon: -83.0000, lake: "Huron", casualties: 14, cause: "Collision", depth: "shallow", cargo: "iron ore" },
+    { name: "Sandusky", year: 1856, lat: 44.2333, lon: -82.9000, lake: "Huron", casualties: 0, cause: "Fire", depth: "shallow", cargo: "general freight" },
 
     // Lake Erie wrecks
-    { name: "Atlantic", year: 1852, x: 670, y: 465, lake: "Erie", casualties: 250, cause: "Collision", depth: "shallow", cargo: "immigrants" },
-    { name: "G.P. Griffith", year: 1850, x: 620, y: 470, lake: "Erie", casualties: 286, cause: "Fire", depth: "shallow", cargo: "passengers" },
-    { name: "Marquette & Bessemer No. 2", year: 1909, x: 705, y: 472, lake: "Erie", casualties: 36, cause: "Storm", depth: "unknown", cargo: "railroad cars" },
-    { name: "Steamship Erie", year: 1841, x: 650, y: 480, lake: "Erie", casualties: 175, cause: "Fire", depth: "shallow", cargo: "passengers" },
-    { name: "Phoenix", year: 1819, x: 725, y: 475, lake: "Erie", casualties: 6, cause: "Fire", depth: "shallow", cargo: "general freight" },
-    { name: "Anthony Wayne", year: 1850, x: 590, y: 468, lake: "Erie", casualties: 38, cause: "Fire", depth: "shallow", cargo: "general freight" },
-    { name: "Morning Star", year: 1868, x: 635, y: 490, lake: "Erie", casualties: 30, cause: "Collision", depth: "40 ft", cargo: "iron ore" },
-    { name: "Margaret Olwill", year: 1899, x: 710, y: 465, lake: "Erie", casualties: 16, cause: "Collision", depth: "45 ft", cargo: "grain" },
-    { name: "Cleveco", year: 1942, x: 660, y: 478, lake: "Erie", casualties: 0, cause: "Storm", depth: "50 ft", cargo: "coal" },
-    { name: "Admiral", year: 1942, x: 690, y: 468, lake: "Erie", casualties: 0, cause: "Storm", depth: "55 ft", cargo: "iron ore" },
-    { name: "Phillip Minch", year: 1904, x: 565, y: 485, lake: "Erie", casualties: 7, cause: "Collision", depth: "40 ft", cargo: "iron ore" },
-    { name: "Dean Richmond", year: 1893, x: 720, y: 482, lake: "Erie", casualties: 18, cause: "Storm", depth: "unknown", cargo: "general freight" },
+    { name: "Atlantic", year: 1852, lat: 42.6000, lon: -79.8000, lake: "Erie", casualties: 250, cause: "Collision", depth: "shallow", cargo: "immigrants" },
+    { name: "G.P. Griffith", year: 1850, lat: 41.7000, lon: -81.2000, lake: "Erie", casualties: 286, cause: "Fire", depth: "shallow", cargo: "passengers" },
+    { name: "Marquette & Bessemer No. 2", year: 1909, lat: 42.5833, lon: -79.2500, lake: "Erie", casualties: 36, cause: "Storm", depth: "unknown", cargo: "railroad cars" },
+    { name: "Steamship Erie", year: 1841, lat: 42.2333, lon: -80.1000, lake: "Erie", casualties: 175, cause: "Fire", depth: "shallow", cargo: "passengers" },
+    { name: "Phoenix", year: 1819, lat: 42.8000, lon: -78.9000, lake: "Erie", casualties: 6, cause: "Fire", depth: "shallow", cargo: "general freight" },
+    { name: "Anthony Wayne", year: 1850, lat: 41.5667, lon: -82.9000, lake: "Erie", casualties: 38, cause: "Fire", depth: "shallow", cargo: "general freight" },
+    { name: "Morning Star", year: 1868, lat: 42.1000, lon: -80.6000, lake: "Erie", casualties: 30, cause: "Collision", depth: "40 ft", cargo: "iron ore" },
+    { name: "Margaret Olwill", year: 1899, lat: 42.6000, lon: -79.3500, lake: "Erie", casualties: 16, cause: "Collision", depth: "45 ft", cargo: "grain" },
+    { name: "Cleveco", year: 1942, lat: 42.3000, lon: -80.3000, lake: "Erie", casualties: 0, cause: "Storm", depth: "50 ft", cargo: "coal" },
+    { name: "Admiral", year: 1942, lat: 42.5333, lon: -79.6500, lake: "Erie", casualties: 0, cause: "Storm", depth: "55 ft", cargo: "iron ore" },
+    { name: "Phillip Minch", year: 1904, lat: 41.6333, lon: -82.5333, lake: "Erie", casualties: 7, cause: "Collision", depth: "40 ft", cargo: "iron ore" },
+    { name: "Dean Richmond", year: 1893, lat: 42.6667, lon: -79.1667, lake: "Erie", casualties: 18, cause: "Storm", depth: "unknown", cargo: "general freight" },
 
     // Lake Ontario wrecks
-    { name: "Bay State", year: 1862, x: 830, y: 495, lake: "Ontario", casualties: 0, cause: "Grounded", depth: "shallow", cargo: "none" },
-    { name: "Comet", year: 1861, x: 860, y: 510, lake: "Ontario", casualties: 15, cause: "Collision", depth: "shallow", cargo: "general freight" },
-    { name: "Noronic", year: 1949, x: 775, y: 508, lake: "Ontario", casualties: 119, cause: "Fire", depth: "dockside", cargo: "passengers" },
-    { name: "Edmund Fitzgerald", year: 1873, x: 810, y: 518, lake: "Ontario", casualties: 17, cause: "Collision", depth: "shallow", cargo: "coal" },
-    { name: "Ontario", year: 1817, x: 850, y: 492, lake: "Ontario", casualties: 130, cause: "Storm", depth: "500 ft", cargo: "passengers" },
-    { name: "Hamilton", year: 1813, x: 790, y: 500, lake: "Ontario", casualties: 53, cause: "Storm", depth: "unknown", cargo: "military supplies" },
-    { name: "Scourge", year: 1813, x: 795, y: 520, lake: "Ontario", casualties: 55, cause: "Squall", depth: "290 ft", cargo: "military supplies" },
-    { name: "Wolfe Islander II", year: 1985, x: 870, y: 500, lake: "Ontario", casualties: 0, cause: "Fire", depth: "shallow", cargo: "vehicles" },
-    { name: "Keystorm", year: 1912, x: 825, y: 508, lake: "Ontario", casualties: 0, cause: "Grounded", depth: "shallow", cargo: "grain" },
-    { name: "Aloha", year: 1917, x: 845, y: 522, lake: "Ontario", casualties: 0, cause: "Storm", depth: "30 ft", cargo: "coal" }
+    { name: "Bay State", year: 1862, lat: 43.4667, lon: -77.1667, lake: "Ontario", casualties: 0, cause: "Grounded", depth: "shallow", cargo: "none" },
+    { name: "Comet", year: 1861, lat: 43.9000, lon: -76.5000, lake: "Ontario", casualties: 15, cause: "Collision", depth: "shallow", cargo: "general freight" },
+    { name: "Noronic", year: 1949, lat: 43.6417, lon: -79.3833, lake: "Ontario", casualties: 119, cause: "Fire", depth: "dockside", cargo: "passengers" },
+    { name: "Edmund Fitzgerald", year: 1873, lat: 43.7500, lon: -77.0000, lake: "Ontario", casualties: 17, cause: "Collision", depth: "shallow", cargo: "coal" },
+    { name: "Ontario", year: 1817, lat: 43.8500, lon: -76.7000, lake: "Ontario", casualties: 130, cause: "Storm", depth: "500 ft", cargo: "passengers" },
+    { name: "Hamilton", year: 1813, lat: 43.5500, lon: -77.9000, lake: "Ontario", casualties: 53, cause: "Storm", depth: "unknown", cargo: "military supplies" },
+    { name: "Scourge", year: 1813, lat: 43.2000, lon: -79.1833, lake: "Ontario", casualties: 55, cause: "Squall", depth: "290 ft", cargo: "military supplies" },
+    { name: "Wolfe Islander II", year: 1985, lat: 44.1833, lon: -76.5333, lake: "Ontario", casualties: 0, cause: "Fire", depth: "shallow", cargo: "vehicles" },
+    { name: "Keystorm", year: 1912, lat: 43.6833, lon: -76.9333, lake: "Ontario", casualties: 0, cause: "Grounded", depth: "shallow", cargo: "grain" },
+    { name: "Aloha", year: 1917, lat: 44.0000, lon: -76.7000, lake: "Ontario", casualties: 0, cause: "Storm", depth: "30 ft", cargo: "coal" }
 ];
