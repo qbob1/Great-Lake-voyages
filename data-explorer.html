@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Great Lakes Maritime Data Explorer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px 30px;
+            background: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #495057;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            background: #e9ecef;
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .filters {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+
+        th:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        th::after {
+            content: ' ↕';
+            opacity: 0.5;
+            font-size: 0.8em;
+        }
+
+        th.sort-asc::after {
+            content: ' ↑';
+            opacity: 1;
+        }
+
+        th.sort-desc::after {
+            content: ' ↓';
+            opacity: 1;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #dee2e6;
+            transition: background 0.2s;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        tbody tr:nth-child(even):hover {
+            background: #e9ecef;
+        }
+
+        td {
+            padding: 12px 15px;
+            color: #495057;
+        }
+
+        .source-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background: #667eea;
+            color: white;
+            border-radius: 4px;
+            font-size: 0.8em;
+            margin-right: 5px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+            font-size: 1.2em;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .source-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .source-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚓ Great Lakes Maritime Data Explorer</h1>
+            <p class="subtitle">Historical Voyages & Shipwrecks (1813-1985)</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('voyages')">🚢 Voyages</button>
+            <button class="tab" onclick="showTab('wrecks')">💀 Shipwrecks</button>
+            <button class="tab" onclick="showTab('ports')">🏖️ Ports</button>
+        </div>
+
+        <!-- Voyages Tab -->
+        <div id="voyages-tab" class="tab-content active">
+            <div class="stats" id="voyages-stats"></div>
+
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Search Vessel</label>
+                    <input type="text" id="vessel-search" placeholder="Search by vessel name..." oninput="filterVoyages()">
+                </div>
+                <div class="filter-group">
+                    <label>Year Range</label>
+                    <input type="number" id="year-min" placeholder="From" min="1845" max="1953" oninput="filterVoyages()">
+                </div>
+                <div class="filter-group">
+                    <label>&nbsp;</label>
+                    <input type="number" id="year-max" placeholder="To" min="1845" max="1953" oninput="filterVoyages()">
+                </div>
+                <div class="filter-group">
+                    <label>Voyage Type</label>
+                    <select id="type-filter" onchange="filterVoyages()">
+                        <option value="">All Types</option>
+                        <option value="passenger">Passenger</option>
+                        <option value="freight">Freight</option>
+                        <option value="bulk">Bulk</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table id="voyages-table">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable('voyages', 0)">Year</th>
+                            <th onclick="sortTable('voyages', 1)">Vessel</th>
+                            <th onclick="sortTable('voyages', 2)">From</th>
+                            <th onclick="sortTable('voyages', 3)">To</th>
+                            <th onclick="sortTable('voyages', 4)">Type</th>
+                            <th onclick="sortTable('voyages', 5)">Captain</th>
+                            <th onclick="sortTable('voyages', 6)">Cargo</th>
+                            <th onclick="sortTable('voyages', 7)">Tonnage</th>
+                            <th onclick="sortTable('voyages', 8)">Distance</th>
+                            <th onclick="sortTable('voyages', 9)">Duration</th>
+                            <th>Source</th>
+                        </tr>
+                    </thead>
+                    <tbody id="voyages-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Wrecks Tab -->
+        <div id="wrecks-tab" class="tab-content">
+            <div class="stats" id="wrecks-stats"></div>
+
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Search Vessel</label>
+                    <input type="text" id="wreck-search" placeholder="Search by vessel name..." oninput="filterWrecks()">
+                </div>
+                <div class="filter-group">
+                    <label>Lake</label>
+                    <select id="lake-filter" onchange="filterWrecks()">
+                        <option value="">All Lakes</option>
+                        <option value="Superior">Lake Superior</option>
+                        <option value="Michigan">Lake Michigan</option>
+                        <option value="Huron">Lake Huron</option>
+                        <option value="Erie">Lake Erie</option>
+                        <option value="Ontario">Lake Ontario</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Cause</label>
+                    <select id="cause-filter" onchange="filterWrecks()">
+                        <option value="">All Causes</option>
+                        <option value="Storm">Storm</option>
+                        <option value="Collision">Collision</option>
+                        <option value="Fire">Fire</option>
+                        <option value="Grounding">Grounding</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table id="wrecks-table">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable('wrecks', 0)">Year</th>
+                            <th onclick="sortTable('wrecks', 1)">Vessel</th>
+                            <th onclick="sortTable('wrecks', 2)">Lake</th>
+                            <th onclick="sortTable('wrecks', 3)">Casualties</th>
+                            <th onclick="sortTable('wrecks', 4)">Cause</th>
+                            <th onclick="sortTable('wrecks', 5)">Depth</th>
+                            <th onclick="sortTable('wrecks', 6)">Cargo</th>
+                            <th onclick="sortTable('wrecks', 7)">Location</th>
+                            <th>Source</th>
+                        </tr>
+                    </thead>
+                    <tbody id="wrecks-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Ports Tab -->
+        <div id="ports-tab" class="tab-content">
+            <div class="stats" id="ports-stats"></div>
+
+            <div class="table-container">
+                <table id="ports-table">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable('ports', 0)">Port Name</th>
+                            <th onclick="sortTable('ports', 1)">Lake</th>
+                            <th onclick="sortTable('ports', 2)">Latitude</th>
+                            <th onclick="sortTable('ports', 3)">Longitude</th>
+                            <th>Source</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ports-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script>
+        // Data source information
+        const dataSources = {
+            voyages: "Great Lakes Historical Society Archives, University of Wisconsin-Milwaukee Maritime Database",
+            wrecks: "Great Lakes Shipwreck Research, NOAA Thunder Bay National Marine Sanctuary, David Swayze Shipwreck Database",
+            ports: "NOAA Navigation Charts, Great Lakes Commission Port Directory",
+            coordinates: "USGS Geographic Names Information System (GNIS)"
+        };
+
+        let currentSort = {
+            table: null,
+            column: null,
+            direction: 'asc'
+        };
+
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function sortTable(tableName, column) {
+            const table = document.getElementById(`${tableName}-table`);
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+
+            // Determine sort direction
+            if (currentSort.table === tableName && currentSort.column === column) {
+                currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.direction = 'asc';
+            }
+            currentSort.table = tableName;
+            currentSort.column = column;
+
+            // Update header indicators
+            table.querySelectorAll('th').forEach((th, idx) => {
+                th.classList.remove('sort-asc', 'sort-desc');
+                if (idx === column) {
+                    th.classList.add(`sort-${currentSort.direction}`);
+                }
+            });
+
+            // Sort rows
+            rows.sort((a, b) => {
+                let aVal = a.cells[column].textContent;
+                let bVal = b.cells[column].textContent;
+
+                // Try to parse as number
+                const aNum = parseFloat(aVal.replace(/,/g, ''));
+                const bNum = parseFloat(bVal.replace(/,/g, ''));
+
+                if (!isNaN(aNum) && !isNaN(bNum)) {
+                    return currentSort.direction === 'asc' ? aNum - bNum : bNum - aNum;
+                }
+
+                // String comparison
+                return currentSort.direction === 'asc'
+                    ? aVal.localeCompare(bVal)
+                    : bVal.localeCompare(aVal);
+            });
+
+            // Reappend sorted rows
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function filterVoyages() {
+            const vesselSearch = document.getElementById('vessel-search').value.toLowerCase();
+            const yearMin = parseInt(document.getElementById('year-min').value) || 0;
+            const yearMax = parseInt(document.getElementById('year-max').value) || 9999;
+            const typeFilter = document.getElementById('type-filter').value;
+
+            const filteredVoyages = voyages.filter(v => {
+                const matchesVessel = v.vessel.toLowerCase().includes(vesselSearch);
+                const matchesYear = v.year >= yearMin && v.year <= yearMax;
+                const matchesType = !typeFilter || v.type === typeFilter;
+                return matchesVessel && matchesYear && matchesType;
+            });
+
+            renderVoyagesTable(filteredVoyages);
+        }
+
+        function filterWrecks() {
+            const wreckSearch = document.getElementById('wreck-search').value.toLowerCase();
+            const lakeFilter = document.getElementById('lake-filter').value;
+            const causeFilter = document.getElementById('cause-filter').value;
+
+            const filteredWrecks = wrecks.filter(w => {
+                const matchesName = w.name.toLowerCase().includes(wreckSearch);
+                const matchesLake = !lakeFilter || w.lake === lakeFilter;
+                const matchesCause = !causeFilter || w.cause === causeFilter;
+                return matchesName && matchesLake && matchesCause;
+            });
+
+            renderWrecksTable(filteredWrecks);
+        }
+
+        function renderVoyagesTable(data = voyages) {
+            const tbody = document.getElementById('voyages-tbody');
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="11" class="no-results">No voyages found matching your filters</td></tr>';
+                return;
+            }
+
+            data.forEach(voyage => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${voyage.year}</td>
+                    <td><strong>${voyage.vessel}</strong></td>
+                    <td>${voyage.from}</td>
+                    <td>${voyage.to}</td>
+                    <td>${voyage.type}</td>
+                    <td>${voyage.captain}</td>
+                    <td>${voyage.cargo}</td>
+                    <td>${voyage.tonnage.toLocaleString()}</td>
+                    <td>${voyage.distance} mi</td>
+                    <td>${voyage.duration}</td>
+                    <td><span class="source-badge">Historical</span></td>
+                `;
+            });
+        }
+
+        function renderWrecksTable(data = wrecks) {
+            const tbody = document.getElementById('wrecks-tbody');
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" class="no-results">No shipwrecks found matching your filters</td></tr>';
+                return;
+            }
+
+            data.forEach(wreck => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${wreck.year}</td>
+                    <td><strong>${wreck.name}</strong></td>
+                    <td>${wreck.lake}</td>
+                    <td>${wreck.casualties}</td>
+                    <td>${wreck.cause}</td>
+                    <td>${wreck.depth}</td>
+                    <td>${wreck.cargo}</td>
+                    <td>${wreck.lat.toFixed(4)}, ${wreck.lon.toFixed(4)}</td>
+                    <td><span class="source-badge">NOAA</span></td>
+                `;
+            });
+        }
+
+        function renderPortsTable() {
+            const tbody = document.getElementById('ports-tbody');
+            tbody.innerHTML = '';
+
+            ports.forEach(port => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td><strong>${port.name}</strong></td>
+                    <td>${port.lake}</td>
+                    <td>${port.lat.toFixed(4)}</td>
+                    <td>${port.lon.toFixed(4)}</td>
+                    <td><span class="source-badge">USGS</span></td>
+                `;
+            });
+        }
+
+        function renderStats() {
+            // Voyages stats
+            const voyagesStats = document.getElementById('voyages-stats');
+            const totalTonnage = voyages.reduce((sum, v) => sum + v.tonnage, 0);
+            const avgDistance = Math.round(voyages.reduce((sum, v) => sum + v.distance, 0) / voyages.length);
+
+            voyagesStats.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">${voyages.length}</div>
+                    <div class="stat-label">Total Voyages</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${totalTonnage.toLocaleString()}</div>
+                    <div class="stat-label">Total Tonnage</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${avgDistance}</div>
+                    <div class="stat-label">Avg Distance (mi)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1845-1953</div>
+                    <div class="stat-label">Time Span</div>
+                </div>
+            `;
+
+            // Wrecks stats
+            const wrecksStats = document.getElementById('wrecks-stats');
+            const totalCasualties = wrecks.reduce((sum, w) => sum + w.casualties, 0);
+            const avgDepth = Math.round(wrecks.reduce((sum, w) => sum + parseInt(w.depth), 0) / wrecks.length);
+
+            wrecksStats.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">${wrecks.length}</div>
+                    <div class="stat-label">Total Wrecks</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${totalCasualties}</div>
+                    <div class="stat-label">Total Casualties</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${avgDepth} ft</div>
+                    <div class="stat-label">Average Depth</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1813-1985</div>
+                    <div class="stat-label">Time Span</div>
+                </div>
+            `;
+
+            // Ports stats
+            const portsStats = document.getElementById('ports-stats');
+            portsStats.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">${ports.length}</div>
+                    <div class="stat-label">Total Ports</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Great Lakes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Superior</div>
+                    <div class="stat-label">Largest Lake</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">82,100 km²</div>
+                    <div class="stat-label">Lake Superior Area</div>
+                </div>
+            `;
+        }
+
+        // Initialize tables
+        renderVoyagesTable();
+        renderWrecksTable();
+        renderPortsTable();
+        renderStats();
+    </script>
+</body>
+</html>
