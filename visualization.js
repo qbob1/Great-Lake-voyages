@@ -22,8 +22,8 @@ d3.json("great-lakes-shores.geojson").then(function(greatLakesGeoJSON) {
     const projection = d3.geoMercator();
     const path = d3.geoPath().projection(projection);
 
-    // Fit the projection to the GeoJSON bounds
-    projection.fitSize([width, height], greatLakesGeoJSON);
+    // Fit the projection to the GeoJSON bounds with padding
+    projection.fitExtent([[20, 20], [width - 20, height - 20]], greatLakesGeoJSON);
 
     // Draw the Great Lakes with high-resolution shorelines
     svg.selectAll(".lake")

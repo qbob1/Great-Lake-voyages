@@ -56,7 +56,9 @@ def parse_shores_dat(filename):
                     try:
                         lon = -float(parts[i])  # Convert to negative for Western Hemisphere
                         lat = float(parts[i + 1])
-                        coordinates.append([lon, lat])
+                        # Skip zero coordinates (data separators)
+                        if lon != 0.0 or lat != 0.0:
+                            coordinates.append([lon, lat])
                     except (ValueError, IndexError):
                         continue
 
